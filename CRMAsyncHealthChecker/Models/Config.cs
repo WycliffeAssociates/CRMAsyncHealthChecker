@@ -8,6 +8,8 @@ namespace CRMAsyncHealthChecker.Models
 {
     public class Config
     {
+        public string EnvironmentName { get; set; }
+
         public string ConnectionString { get; set; }
 
         public string EmailServerAddress { get; set; }
