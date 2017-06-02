@@ -56,7 +56,7 @@ namespace CRMAsyncHealthChecker
                     message.To.Add(address);
                 }
 
-                message.Subject = "Async processor warning";
+                message.Subject = $"Async processor warning - {config.EnvironmentName}";
                 message.Body = $"Number of records waiting is over the limit of {config.Limit}";
                 client.Send(message);
             }
