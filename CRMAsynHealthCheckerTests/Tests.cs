@@ -20,7 +20,6 @@ namespace CRMAsynHealthCheckerTests
         public void SetUp()
         {
             this.context = new XrmFakedContext(FakeXrmEasyLicense.NonCommercial);
-            this.service = this.context.GetOrganizationService();
             this.initialEntities = new List<Entity>();
         }
 
@@ -31,6 +30,8 @@ namespace CRMAsynHealthCheckerTests
             recordOne["statuscode"] = new OptionSetValue(0);
             this.initialEntities.Add(recordOne);
             this.context.Initialize(this.initialEntities);
+            this.service = this.context.GetOrganizationService();
+
             Assert.IsFalse(Program.CheckRecordsPastLimit(this.service, 2));
         }
 
@@ -39,14 +40,19 @@ namespace CRMAsynHealthCheckerTests
         {
             Entity recordOne = new Entity("asyncoperation", Guid.NewGuid());
             recordOne["statuscode"] = new OptionSetValue(0);
-            this.initialEntities.Add(recordOne);
             Entity recordTwo = new Entity("asyncoperation", Guid.NewGuid());
             recordTwo["statuscode"] = new OptionSetValue(0);
-            this.initialEntities.Add(recordTwo);
             Entity recordThree = new Entity("asyncoperation", Guid.NewGuid());
             recordThree["statuscode"] = new OptionSetValue(0);
+            this.initialEntities.Add(recordOne);
+            this.initialEntities.Add(recordTwo);
             this.initialEntities.Add(recordThree);
             this.context.Initialize(this.initialEntities);
+            this.service = this.context.GetOrganizationService();
+
+            // Note: This test currently fails with FakeXrmEasy.v9 3.8.0 due to a bug
+            // where RetrieveMultiple returns 0 entities when more than 1 entity is initialized.
+            // The test passes with 1 entity but fails with 2 or more entities.
             Assert.IsTrue(Program.CheckRecordsPastLimit(this.service, 2));
         }
     }
