@@ -56,9 +56,6 @@ namespace CRMAsynHealthCheckerTests
             this.context.Initialize(this.initialEntities);
             this.service = this.context.GetOrganizationService();
 
-            // Note: This test currently fails with FakeXrmEasy.v9 3.8.0 due to a bug
-            // where RetrieveMultiple returns 0 entities when more than 1 entity is initialized.
-            // The test passes with 1 entity but fails with 2 or more entities.
             Assert.IsTrue(Program.CheckRecordsPastLimit(this.service, 2));
         }
     }
