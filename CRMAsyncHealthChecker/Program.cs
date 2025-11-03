@@ -3,9 +3,9 @@ using System.IO;
 using System.Net;
 using System.Net.Mail;
 using CRMAsyncHealthChecker.Models;
+using Microsoft.PowerPlatform.Dataverse.Client;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Tooling.Connector;
 using Newtonsoft.Json;
 
 namespace CRMAsyncHealthChecker
@@ -39,7 +39,7 @@ namespace CRMAsyncHealthChecker
             Config config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(args[0]));
 
             Console.WriteLine("Connecting");
-            CrmServiceClient service = new CrmServiceClient(config.ConnectionString);
+            ServiceClient service = new ServiceClient(config.ConnectionString);
 
             // if we are past the limit then send an email
             Console.WriteLine("Querying");
