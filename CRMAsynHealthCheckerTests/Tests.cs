@@ -4,6 +4,8 @@ using CRMAsyncHealthChecker;
 using FakeXrmEasy;
 using FakeXrmEasy.Abstractions;
 using FakeXrmEasy.Abstractions.Enums;
+using FakeXrmEasy.Middleware;
+using FakeXrmEasy.Middleware.Crud;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 
@@ -12,14 +14,18 @@ namespace CRMAsynHealthCheckerTests
     [TestClass]
     public class Tests
     {
-        private XrmFakedContext context;
+        private IXrmFakedContext context;
         private IOrganizationService service;
         private List<Entity> initialEntities;
 
         [TestInitialize]
         public void SetUp()
         {
-            this.context = new XrmFakedContext(FakeXrmEasyLicense.NonCommercial);
+            this.context = MiddlewareBuilder.New()
+                .SetLicense(FakeXrmEasyLicense.NonCommercial)
+                .AddCrud()
+                .UseCrud()
+                .Build();
             this.initialEntities = new List<Entity>();
         }
 
